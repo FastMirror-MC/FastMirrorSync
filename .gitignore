@@ -1,0 +1,16 @@
+# idea project
+.idea/
+FastMirrorSync.iml
+
+#python cache
+.pytest_cache/
+__pycache__/
+
+# develop
+/src
+/client/lib
+/client/spigot_jdk8
+/client/spigot_jdk16
+/client/spigot_jdk17
+/client/spigot.py
+/client/info.py
