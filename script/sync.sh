@@ -34,6 +34,8 @@ python3.9 spongeforge.py
 python3.9 spongevanilla.py
 python3.9 velocity.py
 python3.9 waterfall.py
+python3.9 lightfall.py
+python3.9 lightfallclient.py
 docker start sync_spigot_jdk8 && docker attach sync_spigot_jdk8
 docker start sync_spigot_jdk16 && docker attach sync_spigot_jdk16
 docker start sync_spigot_jdk17 && docker attach sync_spigot_jdk17
