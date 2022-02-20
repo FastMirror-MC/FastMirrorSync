@@ -23,8 +23,9 @@ def get_file_path(refs: str, output_dir: str):
     return f"{output_dir}/spigot-{j['minecraftVersion']}.jar"
 
 
-with sync_client(info.name) as client:
-    subprocess.run(f"rm -rf {client.resources.workspace}/*.jar", shell=True, check=True)
+with sync_client(name="Spigot", client_name=info.name) as client:
+    subprocess.run(
+        f"rm -rf {client.resources.workspace}/*.jar", shell=True, check=True)
     for version in info.versions:
         json = client.get(f"https://hub.spigotmc.org/versions/{version}.json").json()
         remote_build = json["name"]
@@ -33,7 +34,8 @@ with sync_client(info.name) as client:
         client.info(f"{version} find a newer build {remote_build}")
         try:
             subprocess.run(
-                args=["java", "-jar", "/workspace/buildtools.jar", "--rev", version, "--output-dir", client.resources.workspace], 
+                args=["java", "-jar", "/workspace/buildtools.jar", "--rev",
+                      version, "--output-dir", client.resources.workspace],
                 stdout=sys.stdout,
                 stderr=sys.stdout,
                 encoding="utf-8",

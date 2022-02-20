@@ -6,7 +6,7 @@ by IntelliJ IDEA
 """
 from lib import jenkins
 
-jenkins.execute(name="NukkitXForBedrock", api="https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master",
+jenkins.execute(name="NukkitX", api="https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master",
                 get_artifact=lambda json: json["artifacts"][0], get_version=lambda json: "general",
                 need_skip=lambda client, version, build: client.need_skip(version, build, 0),
                 get_release=lambda json: True)

@@ -29,9 +29,10 @@ if submit_url == "" or submit_url is None:
 
 
 class sync_client:
-    def __init__(self, name, level=logging.INFO):
+    def __init__(self, name, client_name=None, level=logging.INFO):
+        client_name = client_name if client_name is not None else name
         self.name = name
-        self.client_id = str(uuid.uuid5(uuid.NAMESPACE_X500, name))
+        self.client_id = str(uuid.uuid5(uuid.NAMESPACE_X500, client_name))
         self.resources = ResourceManager(name, level)
 
         self.need_skip = self.resources.config.is_skipped

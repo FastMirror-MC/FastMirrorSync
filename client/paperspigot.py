@@ -6,4 +6,4 @@ by IntelliJ IDEA
 """
 import papermc
 
-papermc.execute(client_name="PaperSpigot", project="paper")
+papermc.execute(client_name="Paper", project="paper")
