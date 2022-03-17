@@ -68,7 +68,7 @@ class Spigot(Plugin):
     async def ci(self, ver):
         container = client.containers.get(f"spigot-{ver}")
         container.start()
-        filename = ""
+        filename = None
         for line in container.attach(stdout=True, stderr=True, stream=True):
             log = line.decode().strip()
             if "Saved as" in log and "spigot" in log:
@@ -84,6 +84,9 @@ class Spigot(Plugin):
                 return
             self.info(f"{version} has a new build {build}.")
             filename = await self.ci(version)
+            if not filename:
+                self.info(f"{version} build failed. ")
+                return
             with open(f"{cache_path}/{version}/{filename}", "rb") as stream:
                 await self.submit(
                     version=version,
