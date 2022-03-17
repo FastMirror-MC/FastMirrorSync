@@ -6,7 +6,6 @@ by IntelliJ IDEA
 """
 from __future__ import annotations
 
-import asyncio
 import datetime
 from io import BytesIO
 import json
@@ -24,9 +23,8 @@ USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML
 session = aiohttp.ClientSession()
 
 
-@register_exit_event
-def session_close():
-    asyncio.run(session.close())
+async def client_close():
+    await session.close()
 
 
 async def __request__(self, sign, retry, method, process, **kwargs):

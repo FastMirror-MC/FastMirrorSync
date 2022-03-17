@@ -5,14 +5,17 @@
 by IntelliJ IDEA
 """
 import asyncio
+import atexit
 import importlib
+import sys
+import traceback
 
 from lib import log
+from lib import http
 from plugin import active
 from plugin import *
-__async_enable__ = False
 
-plugins = {}
+__async_enable__ = False
 
 
 async def run(cls):
@@ -34,9 +37,15 @@ async def main():
         for plugin in active:
             await run(getattr(importlib.import_module(f"plugin.{plugin}"), plugin))
 
-# loop = asyncio.get_event_loop()
-# tasks = [run(getattr(importlib.import_module(f"plugin.{plugin}"), plugin)) for plugin in active]
-# loop.run_until_complete(asyncio.wait(tasks))
+
+@atexit.register
+def exit_handler():
+    loop.run_until_complete(http.client_close())
+    loop.close()
+    exc_type, exc_value, exc_tb = sys.exc_info()
+    if exc_value is not None:
+        traceback.print_exception(exc_type, exc_value, exc_tb)
+
+
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
-loop.close()
