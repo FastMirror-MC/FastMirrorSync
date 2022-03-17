@@ -29,7 +29,7 @@ class Velocity(Plugin):
                     continue
                 self.info(f"{version} find a newer build: {build}")
                 url = f"https://papermc.io/api/v2/projects/velocity/versions/{version}/builds/{build}"
-                json = (await self.get(url)).json()
+                json = await self.get(url)
                 application = json["downloads"]["application"]
                 await self.submit(
                     url=f'{url}/downloads/{application["name"]}',
