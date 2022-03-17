@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import datetime
 from io import BytesIO
+import json
 
 import aiohttp
 
@@ -31,23 +32,31 @@ def session_close():
 async def __request__(self, sign, retry, method, process, **kwargs):
     self.debug(f"{sign}: {kwargs['url']}")
     kwargs["timeout"] = 60 if "timeout" not in kwargs else kwargs["timeout"]
-    kwargs["headers"] = {"User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
+    kwargs["headers"] = {
+        "User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
 
     for i in range(retry):
         try:
             async with method(**kwargs) as response:
-                if 200 <= response.status < 300:
-                    return await process(response)
-                self.warning(f"{sign} failed(status code={response.status}). retry({i + 1}/{retry})")
-                self.warning(await response.text())
+                if response.status <= 200 and response.status >= 300:
+                    self.warning(
+                        f"{kwargs['url']} failed(status code={response.status}).")
+                    self.warning(await response.text())
+                    return None
+                return await process(response)
         except Exception as e:
-            self.exception(f"exception occurred at {sign}. ", exc_info=e)
+            self.exception(
+                f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
 def get_json():
     async def closure(response: aiohttp.ClientResponse):
-        return await response.json()
+        try:
+            return await response.json()
+        except json.decoder.JSONDecodeError as e:
+            print(response.text())
+            raise e
 
     return closure
 
@@ -60,13 +69,13 @@ def download_file(stream):
     return closure
 
 
-async def get(self, url, sign="get", retry=1, process=None, **kwargs):
+async def get(self, url, sign="get", retry=3, process=None, **kwargs):
     kwargs["url"] = url
     process = get_json() if process is None else process
     return await __request__(self, sign, retry, session.get, process, **kwargs)
 
 
-async def post(self, url, sign="post", retry=1, process=None, **kwargs):
+async def post(self, url, sign="post", retry=3, process=None, **kwargs):
     kwargs["url"] = url
     process = get_json() if process is None else process
     return await __request__(self, sign, retry, session.post, process, **kwargs)
@@ -80,7 +89,8 @@ async def submit(self,
                  stream,
                  core_version: str = None):
     if type(update_time) == int:
-        update_time: datetime.datetime = datetime.datetime.fromtimestamp(update_time)
+        update_time: datetime.datetime = datetime.datetime.fromtimestamp(
+            update_time)
     if type(update_time) == datetime.datetime:
         update_time: str = datetime2str(update_time)
 
@@ -142,7 +152,8 @@ async def download_and_submit(self,
                               core_version: str = None,
                               checksum: str = None,
                               mode: str = None):
-    log.info(f'download {self.name()}-{version}-{core_version if core_version is not None else build} at {url}')
+    log.info(
+        f'download {self.name()}-{version}-{core_version if core_version is not None else build} at {url}')
     with BytesIO() as stream:
         if not await download(self, url, stream, checksum, mode):
             return
