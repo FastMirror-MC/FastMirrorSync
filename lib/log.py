@@ -8,7 +8,7 @@ import datetime
 import logging
 import sys
 
-import requests
+# import requests
 
 from lib import module
 
@@ -31,7 +31,7 @@ def get_stream_handler():
 
 
 def get_logger(name, level):
-    requests.packages.urllib3.disable_warnings()
+    # requests.packages.urllib3.disable_warnings()
     path = datetime.datetime.now().strftime("%Y-%m-%d")
     logging.basicConfig(level=logging.DEBUG, format=LOGGER_FORMAT, style="{", datefmt=DATE_FORMAT, handlers={
         get_file_handler(f'./log/{path}.log', logging.INFO),
