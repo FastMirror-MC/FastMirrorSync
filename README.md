@@ -27,7 +27,6 @@
 > *python3-venv
 
 python库:   
-> requests == 2.23.0  
 > pytz == 2021.1  
 > aiohttp == 3.6.2  
 > docker == 5.0.3  
