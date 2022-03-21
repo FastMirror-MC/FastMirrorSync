@@ -34,7 +34,7 @@ class SpongeApiPlugin(Plugin):
         base_url = f"https://dl-api-new.spongepowered.org/api/v2/groups/org.spongepowered/artifacts/{self.get_project_name()}"
         for version in (await self.get(base_url))["tags"]["minecraft"]:
             url = f"{base_url}/versions"
-            json = await self.get(f"url?tags=minecraft:{version}&offset=0&limit=10")
+            json = await self.get(f"{url}?tags=minecraft:{version}&offset=0&limit=10")
             for ver, artifact in json["artifacts"].items():
                 if artifact["tagValues"]["minecraft"] != version:
                     continue
