@@ -17,6 +17,7 @@ import docker
 mc_versions = [
     "1.18",
     "1.18.1",
+    "1.18.2",
     "1.17",
     "1.17.1",
     "1.16.5",
@@ -51,7 +52,7 @@ mc_versions = [
 ]
 client = docker.from_env()
 
-cache_path = f"{__cache_root_path__}/spigot"
+cache_path = f"{__cache_root_path__}/Spigot"
 
 if not os.path.exists(cache_path):
     os.makedirs(cache_path)
@@ -73,7 +74,7 @@ class Spigot(Plugin):
             log = line.decode().strip()
             if "Saved as" in log and "spigot" in log:
                 filename = log[log.rfind('/') + 1:]
-            self.info(f"[{ver}] {log}")
+            self.debug(f"[{ver}] {log}")
         return filename
 
     async def run(self) -> None:
