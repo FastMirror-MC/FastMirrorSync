@@ -96,5 +96,6 @@ class Spigot(Plugin):
                     update_time=datetime.datetime.now(),
                     stream=stream
                 )
+            self.write(version, build)
         for v in mc_versions:
             await task(v)
