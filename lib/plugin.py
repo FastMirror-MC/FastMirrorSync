@@ -151,16 +151,13 @@ class JenkinsApiPlugin(Plugin):
     def get_version(self, json) -> str:
         pass
 
-    @staticmethod
-    def get_is_release(json) -> bool:
+    def get_is_release(self, json) -> bool:
         return True
 
-    @staticmethod
-    def get_asset(json) -> dict:
+    def get_asset(self, json) -> dict:
         pass
 
-    @staticmethod
-    def get_ci_url() -> str:
+    def get_ci_url(self) -> str:
         pass
 
     async def run(self) -> None:

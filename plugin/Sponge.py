@@ -67,5 +67,4 @@ class SpongeApiPlugin(Plugin):
                 )
                 if status:
                     self.write(version, core_version)
-                break
             self.info(f"{version} is up-to-date")

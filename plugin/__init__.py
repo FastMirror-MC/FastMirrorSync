@@ -9,6 +9,7 @@ active = [
     "BungeeCord",
     "Lightfall",
     "LightfallClient",
+    "Mohist",
     "NukkitX",
     "Paper",
     "PocketMine",

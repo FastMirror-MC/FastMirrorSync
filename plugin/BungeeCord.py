@@ -12,17 +12,14 @@ class BungeeCord(JenkinsApiPlugin):
     def name() -> str:
         return "BungeeCord"
 
-    @staticmethod
-    def get_ci_url() -> str:
+    def get_ci_url(self) -> str:
         return "https://ci.md-5.net/job/BungeeCord"
 
     def get_version(self, json) -> str:
         return "general"
 
-    @staticmethod
-    def get_asset(json) -> dict:
+    def get_asset(self, json) -> dict:
         return {i["displayPath"].lower(): i for i in json["artifacts"]}["bungeecord.jar"]
 
-    @staticmethod
-    def get_is_release(json) -> bool:
+    def get_is_release(self, json) -> bool:
         return True

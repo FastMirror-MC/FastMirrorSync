@@ -12,17 +12,14 @@ class NukkitX(JenkinsApiPlugin):
     def name() -> str:
         return "NukkitX"
 
-    @staticmethod
-    def get_ci_url() -> str:
+    def get_ci_url(self) -> str:
         return "https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master"
 
     def get_version(self, json) -> str:
         return "general"
 
-    @staticmethod
-    def get_is_release(json) -> bool:
+    def get_is_release(self, json) -> bool:
         return True
 
-    @staticmethod
-    def get_asset(json) -> dict:
+    def get_asset(self, json) -> dict:
         return json["artifacts"][0]
