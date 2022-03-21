@@ -10,6 +10,7 @@ from lib.plugin import GithubApiPlugin
 class Lightfall(GithubApiPlugin):
     __download_enable__ = False
     __submit_enable__ = False
+
     @staticmethod
     def name() -> str:
         return "lightfall"

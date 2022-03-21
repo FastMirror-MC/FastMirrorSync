@@ -4,7 +4,6 @@
 @CreateDate: 2022/2/22 8:29
 by IntelliJ IDEA
 """
-import asyncio
 import re
 
 from lib.http import aio_download

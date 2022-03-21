@@ -43,7 +43,6 @@ def injection(cls, func, name=None):
                 for f in injected_list:
                     f(self, *args, **kwargs)
 
-        # setattr(cls, inject_list_name, injected_list)
         setattr(cls, name, injector)
 
 

@@ -27,7 +27,6 @@ def run_all(o, fn, *args, cls: type = None, queue: set = None, **kwargs):
             continue
         run_all(o, fn, *args, cls=clazz, queue=queue, **kwargs)
         if not getattr(clazz, "__disable_auto_init__", False):
-            # (clazz.__init__ if fn == "__init__" else getattr(clazz, fn, lambda *a, **kw: None))(o, *args, **kwargs)
             getattr(clazz, fn, lambda *a, **kw: None)(o, *args, **kwargs)
             queue.add(clazz)
             log.info(queue)

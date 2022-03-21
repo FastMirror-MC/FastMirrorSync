@@ -7,14 +7,14 @@ by IntelliJ IDEA
 from __future__ import annotations
 
 import datetime
-from io import BytesIO
 import json
+from io import BytesIO
 
 import aiohttp
 
 from lib import log, module
 from lib.config import get_token, get_submit_url
-from lib.utils import datetime2str, get_checksum, if_file_invalid, register_exit_event
+from lib.utils import datetime2str, get_checksum, if_file_invalid
 
 __all__ = ["aio_submit", "aio_download"]
 
@@ -36,15 +36,13 @@ async def __request__(self, sign, retry, method, process, **kwargs):
     for i in range(retry):
         try:
             async with method(**kwargs) as response:
-                if response.status <= 200 and response.status >= 300:
-                    self.warning(
-                        f"{kwargs['url']} failed(status code={response.status}).")
+                if 200 >= response.status >= 300:
+                    self.warning(f"{kwargs['url']} failed(status code={response.status}).")
                     self.warning(await response.text())
                     return None
                 return await process(response)
         except Exception as e:
-            self.exception(
-                f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
+            self.exception(f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
