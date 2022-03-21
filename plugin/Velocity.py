@@ -21,9 +21,9 @@ class Velocity(Plugin):
     async def run(self) -> None:
         base_url = f"https://papermc.io/api/v2/projects/velocity"
         for version in (await self.get(base_url))["versions"]:
-            builds = (await self.get(f"{base_url}/versions/{version}"))["builds"]
+            builds = (await self.get(f"{base_url}/versions/{version}"))["builds"][:20]
             builds.sort()
-            for build in builds[:20]:
+            for build in builds:
                 core_version = f"{version}_build{build}"
                 if not self.need_update(version, core_version):
                     continue
