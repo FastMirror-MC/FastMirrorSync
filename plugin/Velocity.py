@@ -23,7 +23,7 @@ class Velocity(Plugin):
         for version in (await self.get(base_url))["versions"]:
             builds = (await self.get(f"{base_url}/versions/{version}"))["builds"]
             builds.sort()
-            for build in builds:
+            for build in builds[:20]:
                 core_version = f"{version}_build{build}"
                 if not self.need_update(version, core_version):
                     continue

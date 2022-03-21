@@ -23,7 +23,7 @@ class PaperMCApiPlugin(Plugin):
         for version in (await self.get(base_url))["versions"]:
             builds: list = (await self.get(f"{base_url}/versions/{version}"))["builds"]
             builds.sort()
-            for build in builds:
+            for build in builds[:20]:
                 if not self.need_update(version, build):
                     continue
 
