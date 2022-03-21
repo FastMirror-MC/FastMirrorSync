@@ -33,7 +33,7 @@ class Velocity(Plugin):
                 application = json["downloads"]["application"]
                 await self.submit(
                     url=f'{url}/downloads/{application["name"]}',
-                    version=version,
+                    version="general",
                     build=build,
                     core_version=core_version,
                     update_time=json["time"],
