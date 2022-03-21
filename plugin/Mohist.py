@@ -6,11 +6,12 @@ by PyCharm
 """
 from lib.plugin import JenkinsApiPlugin
 
+# 只做1.16.5和1.12.2的同步
 versions = [
-    "1.18.2",
+    # "1.18.2",
     "1.16.5",
     "1.12.2",
-    "1.7.10"
+    # "1.7.10"
 ]
 
 
