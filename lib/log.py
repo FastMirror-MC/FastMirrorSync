@@ -13,7 +13,7 @@ import sys
 from lib import module
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-LOGGER_FORMAT = "{asctime}.{msecs:03.0f} {name} {levelname:>8} --- [{module:>16}:{lineno:>03}]: {message}"
+LOGGER_FORMAT = "{asctime}.{msecs:03.0f} {name:>20} {levelname:>8} --- [{module:>10}:{lineno:>03}]: {message}"
 
 
 def get_file_handler(filename, level):
