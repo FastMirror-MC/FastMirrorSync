@@ -31,7 +31,7 @@ class PaperMCApiPlugin(Plugin):
                 url = f"{base_url}/versions/{version}/builds/{build}"
                 json = await self.get(url)
                 application = json["downloads"]["application"]
-                await self.submit(
+                status = await self.submit(
                     url=f'{url}/downloads/{application["name"]}',
                     version=version,
                     build=build,
@@ -40,6 +40,7 @@ class PaperMCApiPlugin(Plugin):
                     checksum=application["sha256"],
                     mode="sha256"
                 )
-                self.write(version, build)
+                if status:
+                    self.write(version, build)
             self.info(f"{version} is up-to-date.")
 

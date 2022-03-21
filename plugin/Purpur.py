@@ -31,7 +31,7 @@ class Purpur(Plugin):
             if job["result"] != "SUCCESS":
                 continue
             self.info(f"{version} find a new build {build}")
-            await self.submit(
+            status = await self.submit(
                 url=f"{api_url}/{version}/{build}/download",
                 version=version,
                 build=build,
@@ -40,5 +40,6 @@ class Purpur(Plugin):
                 checksum=job["md5"],
                 mode="md5"
             )
-            self.write(version, build)
+            if status:
+                self.write(version, build)
             self.info(f"{version} is up-to-date.")

@@ -55,7 +55,7 @@ class SpongeApiPlugin(Plugin):
                     self.warning(f"{ver} hasn't available assets. skipped.")
                     continue
 
-                await self.submit(
+                status = await self.submit(
                     url=asset["downloadUrl"],
                     version=version,
                     build=get_build(ver),
@@ -65,6 +65,7 @@ class SpongeApiPlugin(Plugin):
                     checksum=asset["sha1"],
                     mode="sha1"
                 )
-                self.write(version, core_version)
+                if status:
+                    self.write(version, core_version)
                 break
             self.info(f"{version} is up-to-date")

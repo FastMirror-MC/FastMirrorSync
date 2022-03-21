@@ -89,13 +89,14 @@ class Spigot(Plugin):
                 self.info(f"{version} build failed. ")
                 return
             with open(f"{cache_path}/{version}/{filename}", "rb") as stream:
-                await self.submit(
+                status = await self.submit(
                     version=version,
                     build=build,
                     release=True,
                     update_time=datetime.datetime.now(),
                     stream=stream
                 )
-            self.write(version, build)
+                if status:
+                    self.write(version, build)
         for v in mc_versions:
             await task(v)
