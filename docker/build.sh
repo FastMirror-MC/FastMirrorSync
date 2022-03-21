@@ -45,7 +45,7 @@ function __create() {
   docker create --name "$container" \
   --env SHELL=sh \
   -v "$path/$ver:/output" \
-  -v "$path/app:/app"
+  -v "$path/app:/app" \
   "$image" "$ver" > /dev/null
   __verify "build container $container"
 }
