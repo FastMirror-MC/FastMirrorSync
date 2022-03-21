@@ -130,7 +130,7 @@ class GithubApiPlugin(Plugin):
                 continue
 
             self.info(f"{version} find a newer version: {core_version}")
-            await self.submit(
+            status = await self.submit(
                 url=asset["browser_download_url"],
                 version=version,
                 core_version=core_version,
@@ -138,7 +138,8 @@ class GithubApiPlugin(Plugin):
                 update_time=update_time,
                 release=release
             )
-            self.write(version, core_version)
+            if status:
+                self.write(version, core_version)
 
 
 @logger
@@ -179,13 +180,14 @@ class JenkinsApiPlugin(Plugin):
 
             asset = self.get_asset(json)
             self.info(f"{version} find a new build {build}")
-            await self.submit(
+            status = await self.submit(
                 url=f'{json["url"]}artifact/{asset["relativePath"]}',
                 version=version,
                 build=build,
                 release=release,
                 update_time=json["timestamp"] // 1000
             )
+            if status:
+                self.write(version, build)
             break
-        self.write(version, build)
         self.info(f"{version} is up-to-date.")

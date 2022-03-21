@@ -50,12 +50,13 @@ class Arclight(Plugin):
                     [v["fileName"] for v in await self.get(artifacts_url)]
                 )
                 artifact = next(iteration)
-                await self.submit(
+                status = await self.submit(
                     url=f"{artifacts_url}/{artifact}",
                     version=version,
                     build=build,
                     release=True,
                     update_time=json["updated"].replace("+00:00", "Z")
                 )
-                self.write(version, build)
+                if status:
+                    self.write(version, build)
             self.info(f"{version} is up-to-date.")

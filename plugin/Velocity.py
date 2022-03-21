@@ -31,7 +31,7 @@ class Velocity(Plugin):
                 url = f"https://papermc.io/api/v2/projects/velocity/versions/{version}/builds/{build}"
                 json = await self.get(url)
                 application = json["downloads"]["application"]
-                await self.submit(
+                status = await self.submit(
                     url=f'{url}/downloads/{application["name"]}',
                     version="general",
                     build=build,
@@ -41,5 +41,6 @@ class Velocity(Plugin):
                     checksum=application["sha256"],
                     mode="sha256"
                 )
-                self.write(version, core_version)
+                if status:
+                    self.write(version, core_version)
             self.info(f"{version} is up-to-date")

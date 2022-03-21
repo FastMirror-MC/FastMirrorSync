@@ -27,21 +27,20 @@ async def client_close():
     await session.close()
 
 
-async def __request__(self, sign, retry, method, process, **kwargs):
+async def __request__(self, sign, retry, method, handler, **kwargs):
     self.debug(f"{sign}: {kwargs['url']}")
     kwargs["timeout"] = 60 if "timeout" not in kwargs else kwargs["timeout"]
-    kwargs["headers"] = {
-        "User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
+    kwargs["headers"] = {"User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
 
     for i in range(retry):
         try:
             async with method(**kwargs) as response:
-                if 200 >= response.status >= 300:
-                    self.warning(f"{kwargs['url']} failed(status code={response.status}).")
-                    self.warning(await response.text())
-                    return None
-                return await process(response)
-        except Exception as e:
+                if 200 <= response.status <= 300:
+                    return await handler(response)
+                self.warning(f"{kwargs['url']} failed(code={response.status}).")
+                self.warning(await response.text())
+                return None
+        except aiohttp.ClientError as e:
             self.exception(f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
     return None
 
@@ -65,16 +64,14 @@ def download_file(stream):
     return closure
 
 
-async def get(self, url, sign="get", retry=3, process=None, **kwargs):
+async def get(self, url, sign="get", retry=3, handler=None, **kwargs):
     kwargs["url"] = url
-    process = get_json() if process is None else process
-    return await __request__(self, sign, retry, session.get, process, **kwargs)
+    return await __request__(self, sign, retry, session.get, get_json() if handler is None else handler, **kwargs)
 
 
-async def post(self, url, sign="post", retry=3, process=None, **kwargs):
+async def post(self, url, sign="post", retry=3, handler=None, **kwargs):
     kwargs["url"] = url
-    process = get_json() if process is None else process
-    return await __request__(self, sign, retry, session.post, process, **kwargs)
+    return await __request__(self, sign, retry, session.post, get_json() if handler is None else handler, **kwargs)
 
 
 async def submit(self,
@@ -112,10 +109,14 @@ async def submit(self,
     log.info(f"info: {params}")
 
     if not getattr(self, "__submit_enable__", True) or getattr(self, "__debug_mode__", False):
-        return
+        return True
     stream.seek(0, 0)
-    async def handler(response): return response
-    await self.post(
+
+    async def handler(response):
+        print("submit success.")
+        return True
+
+    return await self.post(
         url=get_submit_url(),
         sign="submit",
         params=params,
