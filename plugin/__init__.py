@@ -13,6 +13,7 @@ active = [
     "NukkitX",
     "Paper",
     "PocketMine",
+    "Pufferfish",
     "Purpur",
     "Spigot",
     "SpongeForge",
