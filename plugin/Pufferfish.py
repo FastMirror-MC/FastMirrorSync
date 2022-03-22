@@ -8,6 +8,10 @@ from lib.plugin import JenkinsApiPlugin
 
 
 class Pufferfish(JenkinsApiPlugin):
+    @staticmethod
+    def name():
+        return "Pufferfish"
+    
     def get_ci_url(self) -> str:
         return "https://ci.pufferfish.host/job/Pufferfish-1.18/"
 
