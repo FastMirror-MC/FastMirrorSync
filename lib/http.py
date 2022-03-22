@@ -35,20 +35,20 @@ async def __request__(self, sign, retry, method, handler, **kwargs):
     for i in range(retry):
         try:
             async with method(**kwargs) as response:
-                if 200 <= response.status <= 300:
-                    return await handler(response)
-                self.warning(f"{kwargs['url']} failed(code={response.status}).")
-                self.warning(await response.text())
-                return None
+                return await handler(response)
         except aiohttp.ClientError as e:
             self.exception(f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
-def get_json():
+def default(self):
     async def closure(response: aiohttp.ClientResponse):
         try:
-            return await response.json()
+            if 200 <= response.status <= 300:
+                return await response.json()
+            self.warning(f"failed(url={response.url}, code={response.status}).")
+            self.warning(await response.text())
+            return False
         except json.decoder.JSONDecodeError as e:
             print(response.text())
             raise e
@@ -56,22 +56,14 @@ def get_json():
     return closure
 
 
-def download_file(stream):
-    async def closure(response: aiohttp.ClientResponse):
-        stream.write(await response.read())
-        return stream
-
-    return closure
-
-
 async def get(self, url, sign="get", retry=3, handler=None, **kwargs):
     kwargs["url"] = url
-    return await __request__(self, sign, retry, session.get, get_json() if handler is None else handler, **kwargs)
+    return await __request__(self, sign, retry, session.get, default(self) if handler is None else handler, **kwargs)
 
 
 async def post(self, url, sign="post", retry=3, handler=None, **kwargs):
     kwargs["url"] = url
-    return await __request__(self, sign, retry, session.post, get_json() if handler is None else handler, **kwargs)
+    return await __request__(self, sign, retry, session.post, default(self) if handler is None else handler, **kwargs)
 
 
 async def submit(self,
@@ -112,9 +104,16 @@ async def submit(self,
         return True
     stream.seek(0, 0)
 
-    async def handler(response):
-        print("submit success.")
-        return True
+    async def handler(response: aiohttp.ClientResponse):
+        status = True
+        if 200 <= response.status < 300:
+            self.info("submit success.")
+        elif response.status == 403:
+            self.warn(f"submit skipped: {await response.text()}")
+        else:
+            self.error("submit failed")
+            status = False
+        return status
 
     return await self.post(
         url=get_submit_url(),
@@ -127,8 +126,13 @@ async def submit(self,
 
 
 async def download(self, url, stream, checksum: str = None, mode: str = None):
+    async def handler(response: aiohttp.ClientResponse):
+        if 200 <= response.status < 300:
+            stream.write(await response.read())
+            return True
+        return False
     if getattr(self, "__download_enable__", True) and not getattr(self, "__debug_mode__", False):
-        res = await self.get(url, sign="download", handler=download_file(stream))
+        res = await self.get(url, sign="download", handler=handler)
         if res is None:
             self.error("server has no response.")
             return False
