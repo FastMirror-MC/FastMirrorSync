@@ -19,7 +19,7 @@ def get_core_version(ver: str, version: str):
 
 def get_build(ver: str):
     builds = re.findall(r'(?:RC|BETA-)(\d+)', ver)
-    return 0 if builds is None else builds[0]
+    return 0 if not builds else builds[0]
 
 
 @logger
