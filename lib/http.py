@@ -30,14 +30,16 @@ async def client_close():
 async def __request__(self, sign, retry, method, handler, **kwargs):
     self.debug(f"{sign}: {kwargs['url']}")
     kwargs["timeout"] = 60 if "timeout" not in kwargs else kwargs["timeout"]
-    kwargs["headers"] = {"User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
+    kwargs["headers"] = {
+        "User-Agent": USERAGENT} if "headers" not in kwargs else kwargs["headers"]
 
     for i in range(retry):
         try:
             async with method(**kwargs) as response:
                 return await handler(response)
         except aiohttp.ClientError as e:
-            self.exception(f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
+            self.exception(
+                f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
@@ -46,7 +48,8 @@ def default(self):
         try:
             if 200 <= response.status <= 300:
                 return await response.json()
-            self.warning(f"failed(url={response.url}, code={response.status}).")
+            self.warning(
+                f"failed(url={response.url}, code={response.status}).")
             self.warning(await response.text())
             return False
         except json.decoder.JSONDecodeError as e:
@@ -158,7 +161,7 @@ async def download_and_submit(self,
     with BytesIO() as stream:
         if not await download(self, url, stream, checksum, mode):
             return
-        await submit(
+        return await submit(
             self=self,
             version=version,
             core_version=core_version,
