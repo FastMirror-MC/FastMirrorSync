@@ -9,6 +9,7 @@ active = [
     "BungeeCord",
     "Lightfall",
     "LightfallClient",
+    "LoliServer",
     "Mohist",
     "NukkitX",
     "Paper",
