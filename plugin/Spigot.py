@@ -92,6 +92,7 @@ class Spigot(Plugin):
                 status = await self.submit(
                     version=version,
                     build=0,
+                    core_version=f"build{build}",
                     release=True,
                     update_time=datetime.datetime.now(),
                     stream=stream
