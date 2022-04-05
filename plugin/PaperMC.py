@@ -21,7 +21,7 @@ class PaperMCApiPlugin(Plugin):
     async def run(self) -> None:
         base_url = f"https://papermc.io/api/v2/projects/{self.get_project_name()}"
         for version in (await self.get(base_url))["versions"]:
-            builds: list = (await self.get(f"{base_url}/versions/{version}"))["builds"][:20]
+            builds: list = (await self.get(f"{base_url}/versions/{version}"))["builds"][-20:]
             builds.sort()
             for build in builds:
                 if not self.need_update(version, build):
@@ -43,4 +43,3 @@ class PaperMCApiPlugin(Plugin):
                 if status:
                     self.write(version, build)
             self.info(f"{version} is up-to-date.")
-
