@@ -11,7 +11,8 @@ import os.path
 from lib import log
 
 token = ""
-submit_url = "https://download.fastmirror.net:50000/submit"  # os.getenv("SUBMIT_URL")
+# os.getenv("SUBMIT_URL")
+submit_url = "https://download.fastmirror.net:50000/submit"
 
 
 def get_token():
@@ -26,7 +27,7 @@ if not token:
     if os.path.exists("./auth/token"):
         with open("./auth/token", "r", encoding="utf-8") as fp:
             lines = fp.readlines()
-            token = "".join(lines if len(lines) < 2 else lines[1:-1])
+            token = "".join(lines if len(lines) < 2 else lines[1:-1]).strip()
 if submit_url == "" or submit_url is None:
     log.error("environment variable SUBMIT_URL is required.")
     log.error("example: https://localhost/submit")

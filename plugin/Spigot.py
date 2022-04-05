@@ -91,7 +91,7 @@ class Spigot(Plugin):
             with open(f"{cache_path}/{version}/{filename}", "rb") as stream:
                 status = await self.submit(
                     version=version,
-                    build=build,
+                    build=0,
                     release=True,
                     update_time=datetime.datetime.now(),
                     stream=stream
