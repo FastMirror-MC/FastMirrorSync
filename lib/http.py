@@ -5,10 +5,12 @@
 by IntelliJ IDEA
 """
 from __future__ import annotations
+import asyncio
 
 import datetime
 import json
 from io import BytesIO
+from sys import exc_info
 
 import aiohttp
 
@@ -40,6 +42,9 @@ async def __request__(self, sign, retry, method, handler, **kwargs):
         except aiohttp.ClientError as e:
             self.exception(
                 f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
+        except asyncio.exceptions.TimeoutError as e:
+            self.exception(
+                f"request time out. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
