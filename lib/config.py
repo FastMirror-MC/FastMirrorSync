@@ -11,8 +11,7 @@ import os.path
 from lib import log
 
 token = ""
-# os.getenv("SUBMIT_URL")
-submit_url = "https://download.fastmirror.net:50000/submit"
+submit_url = os.getenv("SUBMIT_URL")
 
 
 def get_token():
