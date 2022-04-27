@@ -19,7 +19,7 @@ class LoliServer(Plugin):
         return "LoliServer"
 
     def get_ci_url(self) -> str:
-        return "https://cdn.ci.loliidc.cn:30011/job/LoliServer-1.16.5"
+        return "https://jenkins.rbqcloud.cn:30011/job/LoliServer-1.16.5"
 
     def get_version(self, json) -> str:
         return "1.16.5"

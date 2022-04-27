@@ -39,12 +39,11 @@ async def __request__(self, sign, retry, method, handler, **kwargs):
         try:
             async with method(**kwargs) as response:
                 return await handler(response)
+        except asyncio.exceptions.TimeoutError as e:
+            self.error(f"request time out. retry({i + 1}/{retry})")
         except aiohttp.ClientError as e:
             self.exception(
                 f"exception occurred at {sign}. retry({i + 1}/{retry})", exc_info=e)
-        except asyncio.exceptions.TimeoutError as e:
-            self.exception(
-                f"request time out. retry({i + 1}/{retry})", exc_info=e)
     return None
 
 
