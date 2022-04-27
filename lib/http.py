@@ -40,6 +40,8 @@ async def __request__(self, sign, retry, method, handler, **kwargs):
             async with method(**kwargs) as response:
                 return await handler(response)
         except asyncio.exceptions.TimeoutError as e:
+            kwargs['data']['file'].seek(0, 0)
+            self.info(f"stream closed: {kwargs['data']['file'].closed}")
             self.error(f"request time out. retry({i + 1}/{retry})")
         except aiohttp.ClientError as e:
             self.exception(
