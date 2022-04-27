@@ -51,8 +51,8 @@ class LoliServer(Plugin):
             asset = self.get_asset(json)
             self.info(f"{version} find a new build {build}")
             status = await self.submit(
-                # loliserver这次的ci可能是nginx那边没转发Protocol，返回的API里面URL用的http
-                url=f'{json["url"].replace("http://", "https://")}artifact/{asset["relativePath"]}',
+                # loliserver你们是真的一点人事不干啊
+                url=f'{json["url"].replace("http://cdn.ci.loliidc.cn:30011", "https://jenkins.rbqcloud.cn:30011")}artifact/{asset["relativePath"]}',
                 version=version,
                 build=build,
                 release=release,
