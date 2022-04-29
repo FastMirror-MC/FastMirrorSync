@@ -11,6 +11,7 @@ import datetime
 import json
 from io import BytesIO
 from sys import exc_info
+import traceback
 
 import aiohttp
 
@@ -124,7 +125,15 @@ async def submit(self,
             status = False
         return status
 
-    return await self.post(
+    def close(stream_self):
+        self.warn("Unexpected call. trace:")
+        self.warn(f"\n{traceback.format_stack}")
+        pass
+
+    setattr(stream, "origin_close", getattr(stream, "close"))
+    setattr(stream, "close", close)
+
+    ans = await self.post(
         url=get_submit_url(),
         sign="submit",
         params=params,
@@ -132,6 +141,8 @@ async def submit(self,
         data={"file": stream},
         handler=handler
     )
+    stream.origin_close()
+    return ans
 
 
 async def download(self, url, stream, checksum: str = None, mode: str = None):
@@ -176,7 +187,6 @@ async def download_and_submit(self,
             update_time=update_time,
             stream=stream
         )
-    pass
 
 
 @module.register("submit")
