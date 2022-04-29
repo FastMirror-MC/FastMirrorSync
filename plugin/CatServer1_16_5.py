@@ -16,10 +16,10 @@ from lib.version import integer_version
 class CatServer1_16_5(Plugin):
     @staticmethod
     def name() -> str:
-        return "CatServer1_16_5"
+        return "CatServer"
 
     def client_name(self) -> str:
-        return "CatServer"
+        return "CatServer1_16_5"
 
     def get_ci_url(self) -> str:
         return "https://jenkins.rbqcloud.cn:30011/job/CatServer-1.16.5"

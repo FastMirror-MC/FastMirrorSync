@@ -6,10 +6,10 @@ class CatServer1_12_2(GithubApiPlugin):
 
     @staticmethod
     def name() -> str:
-        return "CatServer1_12_2"
+        return "CatServer"
 
     def client_name(self) -> str:
-        return "CatServer"
+        return "CatServer1_12_2"
 
     def get_version(self, json) -> str:
         return "1.12.2"
