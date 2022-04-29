@@ -80,7 +80,8 @@ class Plugin:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.info(f"task {self.name()} finished in {(get_mills_time() - self.__start_time__) / 1000}s.")
+        self.info(
+            f"task {self.name()} finished in {(get_mills_time() - self.__start_time__) / 1000}s.")
         if exc_type is not None:
             self.exception("exit with exception.", exc_info=exc_type)
 
@@ -119,7 +120,7 @@ class GithubApiPlugin(Plugin):
             version = self.get_version(publish)
             core_version = self.get_core_version(publish)
             build = self.get_build_number(publish)
-            asset = self.get_asset(publish)
+            asset = self.get_asset(publish) if "assets" in publish and len(publish["assets"]) > 0 else None
             release = not publish["prerelease"]
             update_time = publish["published_at"]
 
@@ -168,7 +169,8 @@ class JenkinsApiPlugin(Plugin):
 
         while True:
             if len(json["artifacts"]) < 1:
-                self.warning(f"this build(#{build}) has no artifact. skipped. ")
+                self.warning(
+                    f"this build(#{build}) has no artifact. skipped. ")
                 break
             if json["result"] != "SUCCESS":
                 break

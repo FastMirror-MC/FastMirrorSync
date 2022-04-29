@@ -13,13 +13,16 @@ from lib.version import integer_version
 @logger
 @aio_download
 @integer_version("./config")
-class LoliServer(Plugin):
+class CatServer1_16_5(Plugin):
     @staticmethod
     def name() -> str:
-        return "LoliServer"
+        return "CatServer1_16_5"
+
+    def client_name(self) -> str:
+        return "CatServer"
 
     def get_ci_url(self) -> str:
-        return "https://jenkins.rbqcloud.cn:30011/job/LoliServer-1.16.5"
+        return "https://jenkins.rbqcloud.cn:30011/job/CatServer-1.16.5"
 
     def get_version(self, json) -> str:
         return "1.16.5"
