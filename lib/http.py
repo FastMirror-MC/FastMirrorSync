@@ -126,8 +126,8 @@ async def submit(self,
         return status
 
     def close():
-        self.warn("Unexpected call. trace:")
-        self.warn(f"\n{traceback.format_stack}")
+        self.warning("Unexpected call. trace:")
+        self.warning(f"\n{traceback.format_stack}")
         pass
 
     setattr(stream, "origin_close", getattr(stream, "close"))
