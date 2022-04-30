@@ -10,8 +10,6 @@ import asyncio
 import datetime
 import json
 from io import BytesIO
-from sys import exc_info
-import traceback
 
 import aiohttp
 
@@ -42,7 +40,6 @@ async def __request__(self, sign, retry, method, handler, **kwargs):
                 return await handler(response)
         except asyncio.exceptions.TimeoutError as e:
             kwargs['data']['file'].seek(0, 0)
-            self.info(f"stream closed: {kwargs['data']['file'].closed}")
             self.error(f"request time out. retry({i + 1}/{retry})")
         except aiohttp.ClientError as e:
             self.exception(
@@ -125,13 +122,10 @@ async def submit(self,
             status = False
         return status
 
-    def close():
-        self.warning("Unexpected call. trace:")
-        self.warning(f"\n{traceback.format_stack}")
-        pass
-
+    # 进程结束的时候会del参数(threading.py#896L, del self._target, self._args, self._kwargs)，
+    # 这个时候流会被关闭。想复用这个流只能这么操作。
     setattr(stream, "origin_close", getattr(stream, "close"))
-    setattr(stream, "close", close)
+    setattr(stream, "close", lambda: None)
 
     ans = await self.post(
         url=get_submit_url(),
