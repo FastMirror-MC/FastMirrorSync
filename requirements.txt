@@ -1,3 +1,0 @@
-pytz==2021.1
-aiohttp==3.6.2
-docker==5.0.3

@@ -1,14 +1,2 @@
-# idea project
-.idea/
-FastMirrorSync.iml
-
-#python cache
-.pytest_cache/
-*/__pycache__/
-
-auth/
-config/
-log/
-tmp/
-
-venv/
+target
+Cargo.lock
