@@ -29,7 +29,7 @@ pub struct Collector {
 
 fn default_exception_handler(error: Error) {
     eprintln!("{}: \n{}", error, error.backtrace());
-    std::process::exit(1);
+    // std::process::exit(1);
 }
 
 fn helper(name: &String) {
@@ -140,6 +140,7 @@ impl Collector {
         self.upload(url, chunk, uploaded, total_size)?;
         uploaded += chunk.len();
         assert!(uploaded == total_size);
+        println!("");
 
         println!("upload finished.");
 

@@ -65,7 +65,7 @@ pub mod api {
                     .header("Content-Length", chunk.len().to_string().as_str())
                     .send()?
                     .json::<ApiResponse<TaskReport>>()?;
-                println!("progress: {:2.2}%", (offset as f64) / (total_size as f64) * (100 as f64));
+                print!("\rprogress: {:2.2}%", (offset as f64) / (total_size as f64) * (100 as f64));
                 get_data_from_response(report)
             };
 
