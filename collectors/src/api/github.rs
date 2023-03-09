@@ -63,7 +63,7 @@ impl Builder {
 
 fn default_get_version(api: &Api) -> Result<(String, String)> {
     let binding = api.tag_name.to_string();
-    let split = split_once(&binding, "-")?;
+    let split = split_once(&binding, "-").or(split_once(&binding, "/"))?;
     Ok((split.0.to_owned(), split.1.to_owned()))
 }
 

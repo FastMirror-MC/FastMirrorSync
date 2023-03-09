@@ -46,7 +46,7 @@ impl Collector {
 
         let any = self.records.iter().any(|i| &i.mc_version == mc_version);
         if !any { self.fetch(mc_version)?; }
-        println!("{:?}", self.records);
+        // println!("{:?}", self.records);
         
         let item = self.records.iter()
             .find(|item| &item.mc_version == mc_version && &item.core_version == core_version);

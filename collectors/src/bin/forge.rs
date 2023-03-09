@@ -36,6 +36,7 @@ fn get_artifact(version: &str, mc_version: &str, core_version: &str, update_time
 
 }
 
+#[allow(dead_code)]
 fn full_dump(take: i32, minimum_mc_version: &str) -> Result<impl Iterator<Item = Manifest>> {
     let client = client();
     let text = client.get("https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml")
@@ -78,6 +79,7 @@ fn full_dump(take: i32, minimum_mc_version: &str) -> Result<impl Iterator<Item =
     Ok(list.into_iter())
 }
 
+#[allow(dead_code)]
 fn get_latest() -> Result<impl Iterator<Item = Manifest>> {
     let client = client();
     let text = client.get("https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml")

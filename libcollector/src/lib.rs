@@ -32,8 +32,8 @@ fn default_exception_handler(error: Error) {
     std::process::exit(1);
 }
 
-fn helper() {
-    println!(r#"usage: [--host=<remote host>] [(--username|-u)=<username>] [(--password|-p)=<password>] [--help|-h]"#);
+fn helper(name: &String) {
+    println!(r#"usage: {name} [--host=<remote host>] [(--username|-u)=<username>] [(--password|-p)=<password>] [--help|-h]"#);
     std::process::exit(0);
 }
 
@@ -44,19 +44,22 @@ impl Collector {
         let mut password: String = env::var("COLLECTOR_PASSWORD").unwrap_or(String::default());
 
         let mut args = env::args().collect::<Vec<String>>();
-        args.pop();
+        let app_name = args.remove(0);
 
         for arg in args {
-            let (key, value) = split_once(&arg, "=")?;
+            let (key, value) = match split_once(&arg, "=") {
+                Ok((a, b)) => (a, b),
+                Err(_) => (arg.as_str(), "")
+            };
             match key.to_lowercase().as_str() {
                 "--host"     => { remote_host = value.to_string(); }
                 "--username" => { username = value.to_string(); }
                 "-u"         => { username = value.to_string(); }
                 "--password" => { password = value.to_string(); }
                 "-p"         => { password = value.to_string(); }
-                "--help"     => helper(),
-                "-h"         => helper(),
-                _            => helper()
+                "--help"     => helper(&app_name),
+                "-h"         => helper(&app_name),
+                _            => helper(&app_name)
             }
         }
 
@@ -101,10 +104,17 @@ impl Collector {
             hex::encode(&bytes)
         } );
 
+        // create task
+        let task = match self.create_task(&manifest) {
+            Ok(ret) => ret,
+            Err(e) => {
+                println!("{e}");
+                return Ok(false)
+            }
+        };
+
         println!("{name} detected a new version: {}", manifest.id());
 
-        // create task
-        let task = self.create_task(&manifest)?;
         let url = {
             if let Some(tmp) = &task["upload_uri"] { tmp }
             else                               { return Ok(true); }
