@@ -4,7 +4,7 @@ use anyhow::{Result, Error, Ok};
 use libcollector::{manifest::Manifest, http::client, datetime::from_timestamp, utils::split_once};
 
 //这里可以限制数量
-const QUERY_STRING: &'static str = "tree=allBuilds[number,result,building,timestamp,artifacts[*]]{,20}";
+const QUERY_STRING: &'static str = "tree=allBuilds[number,displayName,result,building,timestamp,artifacts[*]]{,20}";
 
 // struct define
 #[derive(Deserialize, Debug)]
