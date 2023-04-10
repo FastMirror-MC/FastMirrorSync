@@ -12,7 +12,7 @@ fn main() -> Result<()> {
             let (mc, core) = split_once(&binding, "/")?;
             match mc.to_lowercase().as_str() {
                 "greathorn" => return Ok(("1.19.3".to_string(), core.to_owned())),
-                // "horn"      => return Ok(("1.19".to_string(), core.to_owned())),
+                "horn"      => return Ok(("1.19.2".to_string(), core.to_owned())),
                 _           => return Ok((mc.to_owned(), core.to_owned()))
             }
         });
