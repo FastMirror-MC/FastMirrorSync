@@ -92,7 +92,6 @@ impl Builder {
 
         for mc_version in mc_versions {
             self.walk_mc_version(url, &mc_version, &mut result)?;
-            break;
         }
 
         Ok(result.into_iter())
