@@ -78,7 +78,9 @@ impl Builder {
             println!("download successful.");
             
             for api in releases {
-
+                if api.result != "SUCCESS" {
+                    continue;
+                }
                 let asset = (self.select_asset)(&api)?;
                 let (mc_version, core_version) = (self.get_version)(&job_name, &api, &asset)?;
                 let timestamp = api.timestamp;
@@ -114,6 +116,6 @@ fn default_get_core_version(job: &'static str, api: &Api, _: &Asset) -> Result<(
 fn default_get_asset(api: &Api) -> Result<Asset> { Ok(
 api.artifacts
     .first()
-    .ok_or(Error::msg("assets not found."))?
+    .ok_or(Error::msg(format!("assets of {} not found", api.display_name)))?
     .to_owned()
 )}
