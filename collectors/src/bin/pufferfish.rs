@@ -6,7 +6,9 @@ const PROJECT_NAME: &str = "Pufferfish";
 
 fn main() -> Result<()> {
     let jenkins = builder("https://ci.pufferfish.host")
-        .append_job("Pufferfish-1.18");
+        .append_job("Pufferfish-1.18")
+        .append_job("Pufferfish-1.19")
+        ;
     
     Collector::new(PROJECT_NAME)?.run(jenkins.build()?)
 }
