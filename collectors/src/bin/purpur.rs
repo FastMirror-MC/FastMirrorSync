@@ -39,7 +39,7 @@ fn walk_mc_version(mc_version: &String, result: &mut Vec<Manifest>) -> Result<()
         let artifact = Manifest::new()
             .set_mc_version(mc_version.to_string())
             .set_core_version(format!("build{build}"))
-            .set_update_time(datetime::from_timestamp(record.timestamp)?)
+            .set_update_time(datetime::from_timestamp(record.timestamp / 1000)?)
             .set_download_url(format!("{HOST}/{mc_version}/{build}/download"));
 
         result.push(artifact);
