@@ -1,4 +1,4 @@
-use std::{env, collections::HashSet};
+use std::{env, collections::{HashSet, HashMap}};
 use anyhow::{Result, Error};
 
 use manifest::Manifest;
@@ -24,6 +24,7 @@ pub struct Collector {
     remote_host: String,
     username: String,
     password: String,
+    limit: i32,
     exception_handler: fn (Error)
 }
 
@@ -42,6 +43,7 @@ impl Collector {
         let mut remote_host: String = env::var("COLLECTOR_REMOTE_HOST").unwrap_or(String::default());
         let mut username: String = env::var("COLLECTOR_USERNAME").unwrap_or(String::default());
         let mut password: String = env::var("COLLECTOR_PASSWORD").unwrap_or(String::default());
+        let mut limit: i32 = env::var("COLLECTOR_LIMIT").unwrap_or("10".to_string()).parse()?;
 
         let mut args = env::args().collect::<Vec<String>>();
         let app_name = args.remove(0);
@@ -57,6 +59,8 @@ impl Collector {
                 "-u"         => { username = value.to_string(); }
                 "--password" => { password = value.to_string(); }
                 "-p"         => { password = value.to_string(); }
+                "--limit"    => { limit = str::parse(value)?; }
+                "-l"         => { limit = str::parse(value)?; }
                 "--help"     => helper(&app_name),
                 "-h"         => helper(&app_name),
                 _            => helper(&app_name)
@@ -70,6 +74,7 @@ impl Collector {
             remote_host,
             username,
             password,
+            limit,
             exception_handler: default_exception_handler
         })
     }
@@ -153,12 +158,28 @@ impl Collector {
     }
 
     pub fn run<I>(&mut self, generator: I) -> Result<()> where I: Iterator<Item=Manifest> {
+        let mut record: HashMap<String, i32> = HashMap::new();
         for manifest in generator {
             let manifest = manifest.set_name(self.project_name.to_string());
             let id = manifest.id();
+            let key = manifest.version();
 
+            if record.contains_key(&key) {
+                if record.get(&key).unwrap() >= &self.limit {
+                    continue;
+                }
+            } else {
+                record.insert(key.to_string(), 0);
+            }
             match self.uncatched_single_task(manifest) {
-                Ok(status) => { if status { println!("{id} upload successful.") } else { println!("{id} skipped.") } },
+                Ok(status) => { 
+                    if status { 
+                        println!("{id} upload successful.");
+                        *record.get_mut(&key).unwrap() += 1;
+                    } else { 
+                        println!("{id} skipped.");
+                    }
+                 },
                 Err(e) => (self.exception_handler)(e),
             }
         }
