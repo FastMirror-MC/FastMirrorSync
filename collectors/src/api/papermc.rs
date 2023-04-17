@@ -100,5 +100,5 @@ impl Builder {
 
 pub fn builder(project_name: &str) -> Result<Builder> { Ok(Builder { 
     project_name: project_name.to_string(),
-    take: 25
+    take: 10
 }) }

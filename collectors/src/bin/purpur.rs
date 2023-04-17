@@ -21,13 +21,16 @@ struct Record {
 const PROJECT_NAME: &str = "Purpur";
 const HOST: &str = "https://api.purpurmc.org/v2/purpur";
 
-fn walk_mc_version(mc_version: &String, result: &mut Vec<Manifest>) -> Result<()> {
+fn walk_mc_version(mc_version: &String, result: &mut Vec<Manifest>, take: usize) -> Result<()> {
     let client = client();
 
     let url = &format!("{HOST}/{mc_version}");
-    
-    let builds = client.get(url).send()?
-        .json::<Version>()?.builds.all;
+
+    let builds = {
+        let builds = client.get(url).send()?.json::<Version>()?.builds.all;
+        let take_from = if builds.len() <= take { 0 } else { builds.len() - take };
+        builds[take_from..].to_vec()
+    };
 
     for build in builds {
         let record = client.get(format!("{HOST}/{mc_version}/{build}"))
@@ -57,7 +60,7 @@ fn main() -> Result<()> {
 
     let mut result: Vec<Manifest> = Vec::new();
     for mc_version in versions {
-        walk_mc_version(&mc_version, &mut result)?;
+        walk_mc_version(&mc_version, &mut result, 10)?;
     }
 
     Collector::new(PROJECT_NAME)?.run(result.into_iter())
