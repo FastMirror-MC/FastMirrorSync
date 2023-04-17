@@ -16,7 +16,7 @@ impl Default for Manifest {
         name: Default::default(), 
         mc_version: Default::default(), 
         core_version: Default::default(), 
-        filetype: Default::default(), 
+        filetype: "jar".to_string(), 
         sha1: Default::default(),
         update_time: OffsetDateTime::now_utc(),
         download_url: Default::default()
