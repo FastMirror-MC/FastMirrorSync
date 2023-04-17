@@ -24,7 +24,8 @@ impl Default for Manifest {
 }
 
 impl Manifest {
-    pub fn id(&self)           -> String  { format!("{}-{}-{}", &self.name, &self.mc_version, &self.core_version) }
+    pub fn version(&self)      -> String  { format!("{}-{}", &self.name, &self.mc_version) }
+    pub fn id(&self)           -> String  { format!("{}-{}", self.version(), &self.core_version) }
     pub fn filename(&self)     -> String  { format!("{}.{}", self.id(), &self.filetype) }
     pub fn name(&self)         -> &String { &self.name }
     pub fn mc_version(&self)   -> &String { &self.mc_version }
