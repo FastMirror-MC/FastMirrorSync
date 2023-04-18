@@ -1,4 +1,4 @@
-use anyhow::{Result, Error};
+use anyhow::Result;
 use collectors::api::jenkins::builder;
 use libcollector::Collector;
 
@@ -8,11 +8,12 @@ fn main() -> Result<()> {
         .append_job("CatServer-1.12.2")
         .append_job("CatServer-1.16.5")
         .append_job("CatServer-1.18.2")
-        .asset_selector(|api| { Ok(api.artifacts.iter()
-            .find(|asset| { asset.file_name.contains("server") })
-            .ok_or(Error::msg("asset not found."))?
-            .to_owned()
-        ) });
+        // .asset_selector(|api| { Ok(api.artifacts.iter()
+        //     .find(|asset| { asset.file_name.contains("server") })
+        //     .ok_or(Error::msg("asset not found."))?
+        //     .to_owned()
+        // ) })
+        ;
         
     Collector::new(PROJECT_NAME)?.run(jenkins.build()?)
 }
