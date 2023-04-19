@@ -81,7 +81,13 @@ impl Builder {
                 if api.result != "SUCCESS" {
                     continue;
                 }
-                let asset = (self.select_asset)(&api)?;
+                let asset = match (self.select_asset)(&api) {
+                    core::result::Result::Ok(v) => v,
+                    core::result::Result::Err(e) => {
+                        println!("{}: {:#?}", job_name, e);
+                        continue
+                    }
+                };
                 let (mc_version, core_version) = (self.get_version)(&job_name, &api, &asset)?;
                 let timestamp = api.timestamp;
 
