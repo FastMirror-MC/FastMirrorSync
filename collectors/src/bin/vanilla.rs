@@ -6,8 +6,10 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 struct VanillaManifests { versions: Vec<VanillaManifest> }
 #[derive(Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 struct VanillaManifest {
     id: String,
+    #[serde(alias = "type")]
     manifest_type: String,
     url: String,
     release_time: String

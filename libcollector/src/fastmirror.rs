@@ -2,7 +2,7 @@ pub mod api {
     use std::collections::HashMap;
 
     use anyhow::{Result, Error};
-    use map_macro::map;
+    use map_macro::hash_map;
     use serde::{Serialize, Deserialize};
     use time::macros::offset;
 
@@ -35,7 +35,7 @@ pub mod api {
             let host = &self.remote_host;
             let url = format!("{host}/api/v3/upload/session/create");
             
-            let info = map! {
+            let info = hash_map! {
                         "name" => artifact.name().to_string(),
                   "mc_version" => artifact.mc_version().to_string(),
                 "core_version" => artifact.core_version().to_string(),
