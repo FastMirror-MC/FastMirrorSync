@@ -32,6 +32,7 @@ fn main() -> Result<()> {
     for v_manifest in manifsets {
         let v_meta = client.get(v_manifest.url).send()?
             .json::<VanillaMetadatas>()?.downloads.server;
+        if v_manifest.id.contains("1.18") { break; }
         let core_version = format!("{}-{}", v_manifest.id, &v_meta.sha1[..6]);
 
         let artifact = Manifest::new()
