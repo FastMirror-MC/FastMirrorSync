@@ -9,8 +9,9 @@ fn main() -> Result<()> {
         .append_job("Mohist-1.12.2")
         .append_job("Mohist-1.16.5")
         .append_job("Mohist-1.18.2")
-        .append_job("Mohist-1.19.3")
+        .append_job("Mohist-1.19.2")
         .append_job("Mohist-1.19.4")
+        .append_job("Mohist-1.20.1")
         ;
     
     Collector::new(PROJECT_NAME)?.run(jenkins.build()?)
