@@ -13,6 +13,7 @@ fn main() -> Result<()> {
             let mc_version = match job {
                 "Pufferfish-1.18" => "1.18.2",
                 "Pufferfish-1.19" => "1.19.4",
+                "Pufferfish-1.20" => "1.20.2",
                 _ => return Err(anyhow::Error::msg(format!("unknown job name `{job}`")))
             };
             Ok((mc_version.to_string(), api.number.as_core_version()))
