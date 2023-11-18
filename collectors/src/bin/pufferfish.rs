@@ -8,6 +8,7 @@ fn main() -> Result<()> {
     let jenkins = builder("https://ci.pufferfish.host")
         .append_job("Pufferfish-1.18")
         .append_job("Pufferfish-1.19")
+        .append_job("Pufferfish-1.20")
         .version_selector(|job: &'static str, api: &Api, _: &Asset| {
             let mc_version = match job {
                 "Pufferfish-1.18" => "1.18.2",
